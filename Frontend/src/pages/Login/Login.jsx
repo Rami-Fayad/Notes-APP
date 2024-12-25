@@ -24,7 +24,7 @@ const Login = () => {
        }}/>
        <InputPassword
        value={password}
-       onchange={(e)=>{
+       onChange={(e)=>{
         setpassword(e.target.value)
        }}/>
        <button type='submit' className='btn-primary'>
