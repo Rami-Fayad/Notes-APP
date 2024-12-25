@@ -4,7 +4,7 @@ export const validateEmail = (email) => {
   };
   
 
-  export function getUserInitials(fullName) {
+  export  const UserInitials = (fullName) =>{
     if (!fullName || typeof fullName !== 'string') {
       return '';
     }
