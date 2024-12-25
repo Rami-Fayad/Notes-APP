@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {FiMoon , FiSun, FiX ,FiMenu} from 'react-icons/fi';
 import ProfileInfo from "../Cards/ProfileInfo";
 import { useNavigate } from "react-router-dom";
+import SearchBar from "../SearchBar/SearchBar";
 
 const Navbar = () => {
 const navigate = useNavigate();
@@ -9,6 +10,7 @@ const navigate = useNavigate();
     localStorage.getItem("theme") === "dark"
   );
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchquery, setsearchquery] = useState("");
   useEffect(() => {
     if (darkMode) {
         document.documentElement.classList.add('dark');
@@ -21,7 +23,9 @@ const navigate = useNavigate();
   const toggleDarkMode = () => {
     setDarkMode((prevMode) => !prevMode);
   };
+  const handlesearch = () =>{
 
+  };
   const toggleMenu = () => {
     setMenuOpen((prevOpen) => !prevOpen);
   };
@@ -29,10 +33,24 @@ const navigate = useNavigate();
   const LogOut = () => {
     navigate('/login')
   }
-
+  const onSetClear = () =>{
+    setsearchquery("");
+  }
   return (
     <div className="bg-white dark:bg-gray-800 flex items-center justify-between py-4 px-6 drop-shadow">
       <h2 className="text-2xl  dark:text-white font-medium text-black py-2">Notes</h2>
+
+      <SearchBar
+      value={searchquery}
+      onChange={(e)=> {
+        setsearchquery(e.target.value);
+      }}
+        onSetClear= {onSetClear}
+        handlesearch ={handlesearch}
+
+      />
+
+
       <div className="hidden md:flex md:items-center md:justify-between gap-7">
       <ProfileInfo onLogOut ={LogOut}/> 
       <div
