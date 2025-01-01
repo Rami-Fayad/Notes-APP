@@ -25,10 +25,10 @@ const Notecard = ({
           onClick={OnPin}
         />
       </div>
-      <p class="mb-3 mt-2 font-normal text-gray-700 dark:text-gray-400">
+      <p className="mb-3 mt-2 font-normal text-gray-700 dark:text-gray-400">
         {content?.slice(0, 60)}
       </p>
-      <div class="flex flex-wrap mt-2 -mx-1">
+      <div className="flex flex-wrap mt-2 -mx-1">
         <span className="px-2 py-1 mb-1 mr-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-sm dark:bg-blue-200 dark:text-blue-900">
           {tags}
         </span>
