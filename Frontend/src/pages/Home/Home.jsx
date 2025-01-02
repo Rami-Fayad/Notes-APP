@@ -47,9 +47,11 @@ const Home = () => {
         },
       }}
       contentLabel=""
-      className=" w-[80%] sm:w-[40%] max-h-3/4 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-5 mx-auto mt-14"
+      className=" w-[80%] sm:w-[40%] max-h-3/4 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-5 mx-auto mt-14" 
       >
-      <AddEditNotes />
+      <AddEditNotes 
+      
+      closeModal={closeModal}/>
 
       </Modal>
 
