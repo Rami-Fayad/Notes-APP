@@ -20,7 +20,15 @@ const handleAddNote = () => {
         return;
     }
     setError("");
-    // Add note API call
+    
+    if (type === "Edit")
+    {
+        // Edit Note API Call
+    }
+    else{
+        // Add Note API Call
+    }
+
 };
   return (
     <div className="relative">
