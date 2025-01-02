@@ -25,12 +25,12 @@ const handleAddNote = () => {
   return (
     <div className="relative">
       <button
-        className="absolute w-10 h-10 rounded-full dark:bg-slate-500 bg-primary -top-4 -right-3  flex justify-center items-center hover:bg-blue-200 dark:hover:bg-slate-600  "
+        className=" w-5 h-5 absolute sm:w-10 sm:h-10 rounded-full dark:bg-slate-500 bg-primary -top-4 -right-3  flex justify-center items-center hover:bg-blue-200 dark:hover:bg-slate-600  "
         onClick={() => {
           closeModal();
         }}
       >
-        <MdClose className="text-[32-px] text-white" />
+        <MdClose className="text-[24-px] sm:text-[32-px] text-white" />
       </button>
       <div className="flex flex-col gap-3">
         <label className="input-label">Title</label>
