@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const connectDB = require("./config/db");
 
 app.use(
   cors({
@@ -16,11 +17,11 @@ app.get("/", (req, res) => {
 
 
 
-require('crypto').randomBytes(64).toString('hex');
 
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
+    connectDB();
   console.log(`Server is running on port ${PORT}`);
 });
 
