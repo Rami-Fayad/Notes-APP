@@ -25,7 +25,7 @@ const createUser = async (req, res) => {
       password,
     });
     await user.save();
-    const accessToken = jwt.sign({ user }, process.env.ACCESS_SECRET_TOKEN, {
+    const accessToken = jwt.sign({ _id: user._id  }, process.env.ACCESS_SECRET_TOKEN, {
       expiresIn: "1d",
     });
     return res.status(200).json({
@@ -55,8 +55,8 @@ const handleLogin = async (req, res) => {
   }
 
   if (userInfo.email == email && userInfo.password == password) {
-    const user = { user: userInfo };
-    const accessToken = jwt.sign({ user }, process.env.ACCESS_SECRET_TOKEN, {
+    const user = { _id: userInfo._id };
+    const accessToken = jwt.sign({ _id: user._id  }, process.env.ACCESS_SECRET_TOKEN, {
       expiresIn: "1d",
     });
     return res.status(200).json({
