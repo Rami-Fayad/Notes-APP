@@ -37,11 +37,11 @@ app.post("/create-note", authenticateToken, async (req, res) => {
       title,
       content,
       tags: tags || [],
-      userId // Check if user._id exists
+      userId, // Check if user._id exists
     });
     console.log("Note to save:", note); // Debug log before saving
     await note.save();
-    
+
     return res.status(200).json({
       error: false,
       note,
@@ -52,7 +52,32 @@ app.post("/create-note", authenticateToken, async (req, res) => {
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
-app.get('/test-auth', authenticateToken, (req, res) => {
+app.put("/update-note/:id", authenticateToken, async (req, res) => {
+  const { id } = req.params;
+  const { title, content, tags, isPinned } = req.body;
+  if (!title && !content && !tags) {
+    return res
+      .status(400)
+      .json({ error: true, message: "At least on update is required" });
+  }
+  try {
+    const note = await Note.findById({ _id: id, userId: req.user._id });
+    if (!note) {
+      return res.status(404).json({ error: true, message: "Note not found" });
+    }
+    if (title) note.title = title;
+    if (content) note.content = content;
+    if (tags) note.tags = tags;
+    if (isPinned) note.isPinned = isPinned;
+    await note.save();
+    return res.json({ error: false, note, message: "Note updated successfully" });
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+});
+app.get("/test-auth", authenticateToken, (req, res) => {
   res.json({ message: "Token is valid", user: req.user });
 });
 
