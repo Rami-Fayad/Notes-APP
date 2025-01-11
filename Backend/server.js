@@ -77,9 +77,21 @@ app.put("/update-note/:id", authenticateToken, async (req, res) => {
     res.status(500).json({ error: true, message: "Internal Server Error" });
   }
 });
-app.get("/test-auth", authenticateToken, (req, res) => {
-  res.json({ message: "Token is valid", user: req.user });
-});
+ app.get("/getAllNotes", authenticateToken,async (req, res) => {
+  const userId = req.user._id;
+  try {
+    const notes = await Note.find({ userId }).sort({isPinned: -1});
+    return res.json({ error: false, notes });
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+ });
+
+// app.get("/test-auth", authenticateToken, (req, res) => {
+//   res.json({ message: "Token is valid", user: req.user });
+// });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
