@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import { Link } from "react-router-dom";
 import InputPassword from "../../components/Input/InputPassword";
 import { validateEmail } from "../../utils/validate";
+import { login } from "../../services/apiService";
 
 const Login = () => {
   const [email, setemail] = useState("");
@@ -21,7 +22,20 @@ const Login = () => {
     }
     seterror("");
 
-    // Login API Call 
+    // Login API Call
+    try {
+      const response = await login(email, password);
+      if (response.status === 200) {
+        localStorage.setItem("token", response.data.accessToken);
+        window.location.href = "/dashboard";
+      } else {
+        seterror(response.data.message);
+      }
+    } catch (error){
+      console.error("Error during login:", error);
+      seterror("Something went wrong. Please try again later.");
+
+    }
   };
   return (
     <div>
