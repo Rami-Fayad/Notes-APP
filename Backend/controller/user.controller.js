@@ -61,7 +61,9 @@ const handleLogin = async (req, res) => {
   try {
     const userInfo = await User.findOne({ email });
     if (!userInfo) {
-      return res.status(401).json({ success: false, message: "User not found" });
+      return res
+        .status(401)
+        .json({ success: false, message: "User not found" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, userInfo.password);
@@ -89,6 +91,15 @@ const handleLogin = async (req, res) => {
       .json({ success: false, message: "Internal Server Error" });
   }
 };
+const getUser = async (req, res) => {
+  const  user  = req.user;
+  const isUser = await User.findOne({ _id: user._id });
+  if (!isUser) {
+    return res.status(401).json({ error: true, message: "User not found" });
+  }
+  return res.status(200).json
+  ({  Name: isUser.name, Email: isUser.email, "_id":isUser._id, createdAt: isUser.createdAt });
 
+};
 
-module.exports = { createUser, handleLogin };
+module.exports = { createUser, handleLogin , getUser};
