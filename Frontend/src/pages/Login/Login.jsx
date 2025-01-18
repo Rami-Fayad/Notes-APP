@@ -34,7 +34,7 @@ const Login = () => {
     } catch (error){
       console.error("Error during login:", error);
       seterror("Something went wrong. Please try again later.");
-
+ 
     }
   };
   return (

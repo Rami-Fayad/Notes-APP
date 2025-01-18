@@ -1,19 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import Notecard from "../../components/Cards/Notecard";
 import { MdAdd } from "react-icons/md";
 import AddEditNotes from "./AddEditNotes";
 import { useState } from "react";
 import Modal from "react-modal";
+import { getuser } from "../../services/apiService";
+import { useNavigate } from "react-router-dom";
 
 
 const Home = () => {
+  const [userInfo , setUserInfo]= useState(null);
   const [openAddEditNote, setOpenAddEditNote] = useState({
     isshowen: false,
     type: "Add",
     note: null,
   });
-
+  const navigate = useNavigate();
   const closeModal = () => {
     setOpenAddEditNote({
       isshowen: false,
@@ -21,9 +24,29 @@ const Home = () => {
       note: null, // Clear the note
     });
   };
+  const fetchUserInfo = async () => {
+    try {
+      const response = await getuser();
+      if (response.status === 200) {
+        setUserInfo(response.data);
+      } else {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+      navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    
+    fetchUserInfo();
+  }, []);
+  
   return (
     <>
-      <Navbar />
+      <Navbar
+      userInfo= {userInfo} />
       <div className="container mx-auto">
         <div className="grid grid-cols-1 gap-3 mt-8 md:grid-cols-2 lg:grid-cols-3">
           <Notecard

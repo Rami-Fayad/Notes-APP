@@ -38,3 +38,5 @@ apiClient.interceptors.response.use(
 export const login = async (email, password) =>
   apiClient.post("/user/login", { email, password });
 
+export const getuser= async () =>
+    apiClient.get("/user/get-user");

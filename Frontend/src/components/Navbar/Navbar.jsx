@@ -4,7 +4,7 @@ import ProfileInfo from "../Cards/ProfileInfo";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 
-const Navbar = () => {
+const Navbar = ({userInfo}) => {
 const navigate = useNavigate();
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
@@ -52,7 +52,8 @@ const navigate = useNavigate();
 
 
       <div className="hidden md:flex md:items-center md:justify-between gap-7">
-      <ProfileInfo onLogOut ={LogOut}/> 
+      <ProfileInfo onLogOut ={LogOut}
+      userInfo ={userInfo}/> 
       <div
         className="py-2 px-4 bg-gray-200 dark:bg-gray-600 rounded text-black dark:text-white"
         onClick={toggleDarkMode}
@@ -72,7 +73,8 @@ const navigate = useNavigate();
       {menuOpen && (
         <div className="absolute top-16 right-4 bg-white dark:bg-slate-700 rounded-lg shadow-md p-4 w-60">
           <div className="mb-4">
-            <ProfileInfo onLogOut={LogOut} />
+            <ProfileInfo onLogOut={LogOut}
+            userInfo={userInfo} />
           </div>
           <div className="flex items-center gap-4">
           <div>
