@@ -83,4 +83,33 @@ const DeleteNote = async (req, res) => {
      res.status(500).json({ error: true, message: "Internal Server Error" });
    }
 }
-module.exports = { createNote, EditNote, getAllNotes, DeleteNote };
+
+const PinNote = async (req, res) => {
+
+  const { id } = req.params;
+  const { isPinned } = req.body;
+  if (!isPinned) {
+    return res
+      .status(400)
+      .json({ error: true, message: "At least on update is required" });
+  }
+  try {
+    const note = await Note.findById({ _id: id, userId: req.user._id });
+    if (!note) {
+      return res.status(404).json({ error: true, message: "Note not found" });
+    }
+  
+    if (isPinned) note.isPinned = isPinned;
+    await note.save();
+    return res.json({
+      error: false,
+      note,
+      message: "Note updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: true, message: "Internal Server Error" });
+  }
+
+}
+module.exports = { createNote, EditNote, getAllNotes, DeleteNote, PinNote };
