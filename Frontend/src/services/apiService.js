@@ -37,6 +37,8 @@ apiClient.interceptors.response.use(
 // API functions
 export const login = async (email, password) =>
   apiClient.post("/user/login", { email, password });
+export const signup = async (name, email, password) =>
+  apiClient.post("/user/create-account", { name, email, password });
 
 export const getuser= async () =>
     apiClient.get("/user/get-user");

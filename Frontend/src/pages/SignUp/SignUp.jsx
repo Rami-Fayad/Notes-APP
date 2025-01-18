@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import InputPassword from "../../components/Input/InputPassword";
 import { Link } from "react-router-dom";
 import { validateEmail } from "../../utils/validate";
+import { signup } from "../../services/apiService";
 
 const SignUp = () => {
   const [name, setname] = useState("");
@@ -11,24 +12,33 @@ const SignUp = () => {
   const [error, seterror] = useState(null);
   const handlesignup = async (e) => {
     e.preventDefault();
-    if (!name){
-      seterror("Please Enter a name.")
+    if (!name) {
+      seterror("Please Enter a name.");
       return;
     }
-    if (!validateEmail(email))
-    {
-      seterror("Please Enter a valid email.")
+    if (!validateEmail(email)) {
+      seterror("Please Enter a valid email.");
       return;
     }
-    if(!password)
-    {
-      seterror("Please Enter a password.")
+    if (!password) {
+      seterror("Please Enter a password.");
       return;
     }
     seterror("");
-
-    // SignUp API Call
-  }
+    // Sign Up API Call
+    try {
+      const response = await signup(name, email, password);
+      if (response.status === 200) {
+        localStorage.setItem("token", response.data.accessToken);
+        window.location.href = "/dashboard";
+      } else {
+        seterror(response.data.message);
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      seterror("Something went wrong. Please try again later.");
+    }
+  };
   return (
     <>
       <Navbar />
@@ -65,7 +75,7 @@ const SignUp = () => {
             <button type="submit" className="btn-primary">
               SignUp
             </button>
-             <p className="text-sm text-center mt-4">
+            <p className="text-sm text-center mt-4">
               Already have an account? {""}
               <Link
                 to={"/login"}
@@ -73,7 +83,7 @@ const SignUp = () => {
               >
                 Login
               </Link>
-              </p>
+            </p>
           </form>
         </div>
       </div>

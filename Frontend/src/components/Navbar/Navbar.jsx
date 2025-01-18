@@ -31,6 +31,7 @@ const navigate = useNavigate();
   };
 
   const LogOut = () => {
+    localStorage.clear();
     navigate('/login')
   }
   const onSetClear = () =>{
