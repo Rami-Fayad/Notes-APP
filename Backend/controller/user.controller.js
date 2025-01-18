@@ -1,5 +1,6 @@
 const User = require("../models/user.models");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const createUser = async (req, res) => {
   const { name, email, password } = req.body;
@@ -19,15 +20,21 @@ const createUser = async (req, res) => {
         .json({ error: true, message: "User already exist" });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = new User({
       name,
       email,
-      password,
+      password: hashedPassword,
     });
     await user.save();
-    const accessToken = jwt.sign({ _id: user._id  }, process.env.ACCESS_SECRET_TOKEN, {
-      expiresIn: "1d",
-    });
+    const accessToken = jwt.sign(
+      { _id: user._id },
+      process.env.ACCESS_SECRET_TOKEN,
+      {
+        expiresIn: "1d",
+      }
+    );
     return res.status(200).json({
       error: false,
       user,
@@ -44,31 +51,44 @@ const createUser = async (req, res) => {
 
 const handleLogin = async (req, res) => {
   const { email, password } = req.body;
+
   if (!email || !password) {
     return res
       .status(400)
       .json({ success: false, message: "Please provide email and password" });
   }
-  const userInfo = await User.findOne({ email: email });
-  if (!userInfo) {
-    return res.status(401).json({ success: false, message: "User not found" });
-  }
 
-  if (userInfo.email == email && userInfo.password == password) {
-    const user = { _id: userInfo._id };
-    const accessToken = jwt.sign({ _id: user._id  }, process.env.ACCESS_SECRET_TOKEN, {
-      expiresIn: "1d",
-    });
+  try {
+    const userInfo = await User.findOne({ email });
+    if (!userInfo) {
+      return res.status(401).json({ success: false, message: "User not found" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, userInfo.password);
+    if (!isPasswordValid) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
+    }
+
+    const accessToken = jwt.sign(
+      { _id: userInfo._id },
+      process.env.ACCESS_SECRET_TOKEN,
+      { expiresIn: "1d" }
+    );
+
     return res.status(200).json({
       success: true,
       message: "User logged in successfully",
       accessToken,
     });
-  } else {
+  } catch (error) {
+    console.error("Error during login:", error);
     return res
-      .status(401)
-      .json({ success: false, message: "Invalid credentials" });
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
   }
 };
+
 
 module.exports = { createUser, handleLogin };
